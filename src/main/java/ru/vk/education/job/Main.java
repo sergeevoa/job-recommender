@@ -115,8 +115,8 @@ public class Main {
 
     private static long countMatchNumber(User user) {
         return createMatchList(user).stream()
-                .mapToLong(Match::getMatchingTagsNumber)
-                .sum();
+                .filter(Match::isMatch)
+                .count();
     }
 
     private static int findMatchExp(String command) {

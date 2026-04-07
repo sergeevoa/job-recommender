@@ -5,29 +5,24 @@ public class Match {
 
     private final Job job;
 
-    private final long matchingTagsNumber;
-
-    private Double matchRate = null;
+    private final double matchRate;
 
     public Match(User user, Job job) {
         this.user = user;
         this.job = job;
-        this.matchingTagsNumber = job.countMatchingTags(user.getSkills());
+        this.matchRate = computeRate();
     }
 
-    private void computeRate() {
-        double matchRate = matchingTagsNumber;
+    private double computeRate() {
+        double matchRate = job.countMatchingTags(user.getSkills());
 
         if (user.getExp() < job.getExp())
             matchRate /= 2;
 
-        this.matchRate = matchRate;
+        return matchRate;
     }
 
     public double getMatchRate() {
-        if(matchRate == null) {
-            computeRate();
-        }
         return matchRate;
     }
 
@@ -35,5 +30,7 @@ public class Match {
         job.print();
     }
 
-    public long getMatchingTagsNumber() { return matchingTagsNumber; }
+    public boolean isMatch() {
+        return matchRate > 0;
+    }
 }
