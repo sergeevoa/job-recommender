@@ -1,33 +1,39 @@
 package ru.vk.education.job.entity;
 
 public class Match {
-    private User user;
+    private final User user;
 
-    private Job job;
+    private final Job job;
 
-    private double matchRate;
+    private final long matchingTagsNumber;
+
+    private Double matchRate = null;
 
     public Match(User user, Job job) {
         this.user = user;
         this.job = job;
-        this.matchRate = computeRate();
+        this.matchingTagsNumber = job.countMatchingTags(user.getSkills());
     }
 
-    private double computeRate() {
-        double matchRate = job.countMatchingTags(user.getSkills());
+    private void computeRate() {
+        double matchRate = matchingTagsNumber;
 
         if (user.getExp() < job.getExp())
             matchRate /= 2;
 
-        return matchRate;
+        this.matchRate = matchRate;
     }
 
-
     public double getMatchRate() {
+        if(matchRate == null) {
+            computeRate();
+        }
         return matchRate;
     }
 
     public void printJobInfo() {
         job.print();
     }
+
+    public long getMatchingTagsNumber() { return matchingTagsNumber; }
 }
