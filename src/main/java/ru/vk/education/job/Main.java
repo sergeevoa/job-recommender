@@ -158,12 +158,16 @@ public class Main {
     private static void execute(String command, boolean fromLog) throws IOException {
         switch (command) {
             case USER_LIST_COMMAND -> {
-                users.values().forEach(User::print);
+                users.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEach(entry -> entry.getValue().print());
                 fileService.logCommand(command);
             }
 
             case JOB_LIST_COMMAND -> {
-                jobs.values().forEach(Job::print);
+                jobs.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEach(entry -> entry.getValue().print());
                 fileService.logCommand(command);
             }
 
