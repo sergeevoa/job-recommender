@@ -20,6 +20,10 @@ public class User {
                 String.join(",", skills) + " " + exp);
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Set<String> getSkills() {
         return skills;
     }

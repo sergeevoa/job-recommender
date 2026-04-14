@@ -26,6 +26,10 @@ public class Match {
         return matchRate;
     }
 
+    public Job getJob() {
+        return job;
+    }
+
     public void printJobInfo() {
         job.print();
     }

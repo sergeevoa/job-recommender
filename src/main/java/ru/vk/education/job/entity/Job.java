@@ -28,6 +28,14 @@ public class Job {
                 .count();
     }
 
+    public String getJobName() {
+        return jobName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
     public int getExp() {
         return exp;
     }

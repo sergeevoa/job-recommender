@@ -3,9 +3,13 @@ package ru.vk.education.job;
 import ru.vk.education.job.entity.Job;
 import ru.vk.education.job.entity.Match;
 import ru.vk.education.job.entity.User;
+import ru.vk.education.job.service.BestJobSuggester;
 import ru.vk.education.job.service.FileService;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -84,6 +88,24 @@ public class Main {
                         throw new IllegalArgumentException(e);
                     }
                 });
+
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(
+                new BestJobSuggester(users, jobs),
+                0, 1, TimeUnit.MINUTES
+        );
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            scheduler.shutdown();
+            try {
+                if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                    scheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }));
 
         Scanner sc = new Scanner(System.in);
 
